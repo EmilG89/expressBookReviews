@@ -7,6 +7,14 @@ let users = [];
 
 const isValid = (username)=>{ //returns boolean
 //write code to check is the username is valid
+    let values = Object.values(users);
+    for (let i=0; i<values.lenght; i++) {
+        let user = users[keys[i]];
+        if (user.username === username) {
+            return true;
+        }
+    }
+    return false;
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
