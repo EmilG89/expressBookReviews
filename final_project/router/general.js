@@ -27,33 +27,51 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  return res.send(books);
+  let listOfBooks = new Promise((resolve, reject) => {
+    resolve(JSON.stringify(books, null, 2));
+  });
+
+  listOfBooks.then((message) => {
+      return res.send("List of books: " + message);
+  });
+
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  let number = req.params.isbn;
-  return res.send(books[number]);
- });
+  let bookDetails = new Promise((resolve, reject) => {
+    let number = req.params.isbn;
+    resolve(JSON.stringify(books[number], null, 2));
+  });
+
+  bookDetails.then((message) => {
+    return res.send("Book datails: " + message);
+});
+});
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  let author = req.params.author;
-  let keys = Object.keys(books);
+  let bookByAuthor = new Promise((resolve, reject) => {
+    let author = req.params.author;
+    let keys = Object.keys(books);
 
-  let authorsFound = new Array();
+    let authorsFound = new Array();
 
-  for (let i=0; i < keys.length; i++) {
-    let value = books[keys[i]];
-    let authorValue = value.author;
-    if (authorValue.includes(author)) {
-        authorsFound.push(value);
+    for (let i=0; i < keys.length; i++) {
+        let value = books[keys[i]];
+        let authorValue = value.author;
+        if (authorValue.includes(author)) {
+            authorsFound.push(value);
+        }
     }
-  }
-  
-  return res.send(authorsFound);
+    resolve(JSON.stringify(authorsFound, null, 2));
+  });
+
+  bookByAuthor.then((message) => {
+      return res.send(`Book details for author: ${req.params.author}` + message)
+  });
 
 });
 
